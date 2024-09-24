@@ -15,3 +15,7 @@ output "ilb_private_ip" {
 output "private_link_service_name" {
   value = azurerm_private_link_service.example.name
 }
+
+output "endpoint_connection_name" {
+  value = data.azurerm_private_link_service_endpoint_connections.example.private_endpoint_connections[0].connection_name
+}

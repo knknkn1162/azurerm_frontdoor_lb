@@ -88,3 +88,10 @@ resource "azurerm_cdn_frontdoor_route" "example" {
   # link_to_default_domain = true
   # enabled=true
 }
+
+
+data "azurerm_private_link_service_endpoint_connections" "example" {
+  depends_on = [ azurerm_cdn_frontdoor_route.example ]
+  service_id = azurerm_private_link_service.example.id
+  resource_group_name = var.rg_name
+}
