@@ -89,6 +89,28 @@ resource "azurerm_cdn_frontdoor_route" "example" {
   # enabled=true
 }
 
+resource "azurerm_cdn_frontdoor_rule_set" "example" {
+  name                     = "example"
+  cdn_frontdoor_profile_id = azurerm_cdn_frontdoor_profile.example.id
+}
+
+resource "azurerm_cdn_frontdoor_rule" "example" {
+  depends_on = [azurerm_cdn_frontdoor_origin_group.example, azurerm_cdn_frontdoor_origin.example]
+
+  name                      = "rule-${uuid()}"
+  cdn_frontdoor_rule_set_id = azurerm_cdn_frontdoor_rule_set.example.id
+  order                     = 1
+  behavior_on_match         = "Continue"
+
+  actions {
+    request_header_action {
+      header_action = "Overwrite"
+      header_name = "X-Forwarded-Proto"
+      value = "https"
+    }
+  }
+}
+
 
 data "azurerm_private_link_service_endpoint_connections" "example" {
   depends_on = [ azurerm_cdn_frontdoor_route.example ]
